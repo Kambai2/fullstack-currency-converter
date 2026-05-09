@@ -27,9 +27,19 @@ app.post('/api/convert', async (req, res) => {
     // construct the api
     const url = `${API_URL}/${API_KEY}/pair/${from}/${to}/${amount}`;
       const response = await axios.get(url);
-      console.log(response);
-      
-    } catch (error) {}
+      if (response.data && response.data.result === 'success') {
+        res.json({
+          base: from,
+          target: to,
+          conversionRate: response.data.conversion_rate,
+          convertedAmount: response.data.conversion_result,
+         });
+      }else{
+          res.json({ message: "Error converting currency", details: response.data });
+    } 
+  }catch (error){
+     res.json({ message: "Error converting currency", details: error.message });
+    } 
 });
 
 
