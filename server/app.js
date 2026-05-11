@@ -1,5 +1,6 @@
 require('dotenv').config();
 const axios = require('axios');
+const cors = require("cors");
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const port = process.env.PORT || 5000;
@@ -13,10 +14,15 @@ const apiLimiter = rateLimit({
   max: 100,
 });
 
+//! cors options
+const corsOptions = {
+    origin: ['http://localhost:5173', 'http://localhost:5000']
+}
 
 //! Middleware
 app.use(express.json());
 app.use(apiLimiter);
+app.use(cors(corsOptions));
 
 //! conversation routes
 app.post('/api/convert', async (req, res) => {
