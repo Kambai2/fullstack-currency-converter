@@ -1,43 +1,43 @@
 # Currency Converter Frontend
 
-This is the React + Vite frontend for the Fullstack Currency Converter project.
+This frontend is part of the Fullstack Currency Converter project. It provides the UI for entering currency values, selecting conversion pairs, and displaying conversion results.
+
+For full project setup and backend configuration, see the top-level `README.md`.
 
 ## Overview
 
-The frontend provides a good-looking currency conversion interface with a dark theme and responsive layout. It connects to the backend API to convert currencies in real time.
+The frontend is built with React and Vite. It connects to the backend API to perform live currency conversions and displays results in a responsive dark-themed interface.
 
 ## Features
 
-- Convert amounts between supported currencies
+- Convert currency values between supported currencies
 - Responsive layout for desktop and mobile
-- Dark glassmorphism-inspired UI with gradient accents
-- Integration with Express backend via `axios`
+- Styled using dark glassmorphism and gradient accents
+- Communicates with the backend via `axios`
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the `frontend/` directory, run:
 
 ### `npm install`
 
-Installs frontend dependencies.
+Install frontend dependencies.
 
 ### `npm run dev`
 
-Runs the app in development mode with Vite.
-
-Open `http://localhost:5173` to view it in the browser.
+Run the frontend in development mode.
 
 ### `npm run build`
 
-Builds the app for production.
+Build the production-ready frontend.
 
 ### `npm run preview`
 
-Serves the production build locally for preview.
+Preview the production build locally.
 
 ## Local Development
 
-1. Start the backend API first:
+1. Start the backend API:
 
 ```bash
 cd ../server
@@ -47,7 +47,7 @@ node app.js
 2. Start the frontend:
 
 ```bash
-cd ../frontend
+cd frontend
 npm run dev
 ```
 
@@ -55,6 +55,6 @@ npm run dev
 
 ## Notes
 
-- The frontend expects the backend API to be available at `http://localhost:5000/api/convert`.
-- The backend uses an `.env` file for the ExchangeRate API key.
-- Keep frontend and backend running separately during development.
+- The frontend expects the backend API at `http://localhost:5000/api/convert`.
+- The backend requires an `.env` file with `API_KEY` and `PORT`.
+- For full setup instructions, use the root `README.md`.
