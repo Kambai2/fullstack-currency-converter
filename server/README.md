@@ -1,55 +1,62 @@
-# Currency Converter API Backend
+﻿# Currency Converter Backend
 
-A Node.js/Express API for real-time currency conversion using the ExchangeRate-API.
+This is the Node.js + Express backend for the Fullstack Currency Converter project.
+
+## Overview
+
+The backend provides a simple API that accepts currency conversion requests and returns real-time exchange results using the ExchangeRate-API service.
 
 ## Features
 
-- Real-time currency conversion
-- Support for multiple currencies (USD, EUR, GBP, JPY, CAD, NGN, GHS, XOF)
-- Rate limiting to prevent abuse
-- CORS enabled for frontend integration
-- Error handling and validation
+- Convert currency amounts between supported currencies
+- Real-time exchange rate lookup
+- Rate limiting to reduce abuse
+- CORS support for local frontend integration
+- Validation and error handling for API requests
 
 ## Prerequisites
 
-- Node.js (v14 or higher)
-- npm or yarn
-- ExchangeRate-API key (get one at https://exchangerate-api.com/)
+- Node.js 14 or higher
+- npm
+- ExchangeRate-API key
 
-## Installation
+## Setup
 
-1. Clone the repository and navigate to the server directory:
+### 1. Install dependencies
+
 ```bash
 cd server
-```
-
-2. Install dependencies:
-```bash
 npm install
 ```
 
-3. Create a `.env` file in the server directory and add your API key:
+### 2. Configure environment variables
+
+Create a `.env` file in the `server` folder with:
+
 ```env
 API_KEY=your_exchangerate_api_key_here
 PORT=5000
 ```
 
-## Usage
+## Running the Server
 
-Start the development server:
+Start the backend API:
+
 ```bash
+cd server
 node app.js
 ```
 
-The server will run on `http://localhost:5000`
+The backend will listen on `http://localhost:5000` by default.
 
-## API Endpoints
+## API Endpoint
 
-### POST /api/convert
+### POST `/api/convert`
 
-Convert currency from one currency to another.
+Convert one currency to another.
 
 **Request Body:**
+
 ```json
 {
   "from": "USD",
@@ -58,7 +65,8 @@ Convert currency from one currency to another.
 }
 ```
 
-**Response:**
+**Successful Response:**
+
 ```json
 {
   "base": "USD",
@@ -68,73 +76,30 @@ Convert currency from one currency to another.
 }
 ```
 
-**Error Response:**
-```json
-{
-  "message": "Error converting currency",
-  "details": "Error details here"
-}
-```
-
 ## Supported Currencies
 
-- USD (US Dollar)
-- EUR (Euro)
-- GBP (British Pound)
-- JPY (Japanese Yen)
-- CAD (Canadian Dollar)
-- NGN (Nigerian Naira)
-- GHS (Ghanaian Cedi)
-- XOF (West African CFA Franc)
+- USD
+- EUR
+- GBP
+- JPY
+- CAD
+- NGN
+- GHS
+- XOF
 
-## Rate Limiting
+## Notes
 
-The API is protected with rate limiting:
-- 100 requests per 15 minutes per IP address
-
-## CORS Configuration
-
-The API allows requests from:
-- `http://localhost:5173` (Vite development server)
-- `http://localhost:5000` (for testing)
+- The frontend expects the API at `http://localhost:5000/api/convert`.
+- Keep the `.env` file private; it is not tracked by git.
+- Adjust CORS origins if deploying to a production frontend URL.
 
 ## Dependencies
 
-- **express**: Web framework for Node.js
-- **axios**: HTTP client for API requests
-- **cors**: Cross-origin resource sharing
-- **dotenv**: Environment variable management
-- **express-rate-limit**: Rate limiting middleware
-
-## Environment Variables
-
-- `API_KEY`: Your ExchangeRate-API key (required)
-- `PORT`: Server port (default: 5000)
-
-## Error Handling
-
-The API includes comprehensive error handling for:
-- Invalid currency codes
-- API failures
-- Network errors
-- Rate limiting violations
-
-## Development
-
-To run the server in development mode:
-```bash
-node app.js
-```
-
-## Production Deployment
-
-1. Set environment variables in your production environment
-2. Update CORS origins for your production frontend URL
-3. Use a process manager like PM2 for production deployment
-
-## API Documentation
-
-For more information about the ExchangeRate-API, visit: https://exchangerate-api.com/
+- `express`
+- `axios`
+- `cors`
+- `dotenv`
+- `express-rate-limit`
 
 ## License
 
