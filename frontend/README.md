@@ -1,16 +1,60 @@
-# React + Vite
+# Currency Converter Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React + Vite frontend for the Fullstack Currency Converter project.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The frontend provides a good-looking currency conversion interface with a dark theme and responsive layout. It connects to the backend API to convert currencies in real time.
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Convert amounts between supported currencies
+- Responsive layout for desktop and mobile
+- Dark glassmorphism-inspired UI with gradient accents
+- Integration with Express backend via `axios`
 
-## Expanding the ESLint configuration
+## Available Scripts
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+In the project directory, you can run:
+
+### `npm install`
+
+Installs frontend dependencies.
+
+### `npm run dev`
+
+Runs the app in development mode with Vite.
+
+Open `http://localhost:5173` to view it in the browser.
+
+### `npm run build`
+
+Builds the app for production.
+
+### `npm run preview`
+
+Serves the production build locally for preview.
+
+## Local Development
+
+1. Start the backend API first:
+
+```bash
+cd ../server
+node app.js
+```
+
+2. Start the frontend:
+
+```bash
+cd ../frontend
+npm run dev
+```
+
+3. Open the URL shown by Vite (usually `http://localhost:5173`).
+
+## Notes
+
+- The frontend expects the backend API to be available at `http://localhost:5000/api/convert`.
+- The backend uses an `.env` file for the ExchangeRate API key.
+- Keep frontend and backend running separately during development.
