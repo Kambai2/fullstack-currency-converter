@@ -54,6 +54,11 @@ body {
     font-size: 1rem;
 }
 
+.input option {
+    color: #0f172a;
+    background: #f8fafc;
+}
+
 .input:focus {
     outline: none;
     border-color: rgba(81, 170, 255, 0.88);
