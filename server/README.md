@@ -6,6 +6,8 @@ This is the Node.js + Express backend for the Fullstack Currency Converter proje
 
 The backend provides a simple API that accepts currency conversion requests and returns real-time exchange results using the ExchangeRate-API service.
 
+This backend is designed to work with the React + Vite frontend in the root project and together they form a complete fullstack currency converter application.
+
 ## Features
 
 - Convert currency amounts between supported currencies
