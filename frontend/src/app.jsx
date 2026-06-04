@@ -97,7 +97,10 @@ function App() {
                     <h2>Why Choose Global Currency Converter?</h2>
                     <p>Detailed explanation on advantages or instructions for use.</p>
                 </section>
-        </div>
+                <footer className="footer">
+                    <p>© Kmiracles</p>
+                </footer>
+            </div>
     );
 }
 export default App;

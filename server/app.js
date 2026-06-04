@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
 const port = process.env.PORT || 5000;
 const app = express();
 
-const API_URL = 'https://v6.exchangerate-api.com/v6/';
+const API_URL = 'https://v6.exchangerate-api.com/v6';
 const API_KEY = process.env.API_KEY;
 
 const apiLimiter = rateLimit({
