@@ -21,11 +21,13 @@ function App() {
         }));
     };
 
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         //http Request
         try {
-            const response = await axios.post(`http://localhost:5000/api/convert`, formData);
+            const response = await axios.post(`${apiUrl}/api/convert`, formData);
             setResult(response?.data);
             setError("");
         } catch (error) {

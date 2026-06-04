@@ -14,15 +14,12 @@ const apiLimiter = rateLimit({
   max: 100,
 });
 
-//! cors options
-const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5000']
-}
-
 //! Middleware
 app.use(express.json());
 app.use(apiLimiter);
-app.use(cors(corsOptions));
+app.use(cors());
+
+//! Note: In production, narrow this to your frontend origin for better security.
 
 //! conversation routes
 app.post('/api/convert', async (req, res) => {
