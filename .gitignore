@@ -18,6 +18,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Local npm cache
+.npmcache/
+
 # Runtime data
 pids
 *.pid

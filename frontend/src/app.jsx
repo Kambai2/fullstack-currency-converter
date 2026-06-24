@@ -3,13 +3,14 @@ import axios from "axios";
 import "./CurrencyConverter.css";
 
 function App() {
-    const [formData, setFormData] = useState ({
+    const [formData, setFormData] = useState({
         from: "",
         to: "",
         amount: "",
     });
     const [result, setResult] = useState(null);
-    const [error, setError] = useState ("");
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const currencyCodes = ["USD", "EUR", "GBP", "JPY", "CAD", "NGN", "GHS", "XOF"];
 
@@ -21,17 +22,35 @@ function App() {
         }));
     };
 
-    const apiUrl = import.meta.env.VITE_API_URL || '';
+    const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+
+    const getErrorMessage = (error) => {
+        if (!error) return "Conversion failed. Please try again.";
+        if (error.response?.data) return error.response.data;
+        if (error.message) return error.message;
+        return "Conversion failed. Please try again.";
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //http Request
+        setError("");
+        setResult(null);
+
+        if (!formData.from || !formData.to || !formData.amount) {
+            setError("Please choose both currencies and enter an amount.");
+            return;
+        }
+
+        setLoading(true);
+
         try {
             const response = await axios.post(`${apiUrl}/api/convert`, formData);
             setResult(response?.data);
             setError("");
-        } catch (error) {
-            setError(error?.response?.data || error?.message);
+        } catch (err) {
+            setError(getErrorMessage(err));
+        } finally {
+            setLoading(false);
         }
     };
  
@@ -70,15 +89,15 @@ function App() {
                             ))}
     </select>
             <input
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-            placeholder="Amount"
-            type="number"
-            className="input"
+                name="amount"
+                value={formData.amount}
+                onChange={handleChange}
+                placeholder="Amount"
+                type="number"
+                className="input"
             />
-            <button type="submit" className="submit-btn">
-                Convert
+            <button type="submit" className="submit-btn" disabled={loading}>
+                {loading ? "Converting..." : "Convert"}
             </button>
                 </form>
                 {result && (
@@ -91,7 +110,7 @@ function App() {
                         </p>
                     </div>
                 )}
-                {error && <p className="error">Error: {error} </p>}
+                {error && <p className="error">Error: {error}</p>}
             </section>
                 <section className="additional-info">
                     <h2>Why Choose Global Currency Converter?</h2>

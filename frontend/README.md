@@ -58,3 +58,4 @@ npm run dev
 - The frontend expects the backend API at `http://localhost:5000/api/convert`.
 - The backend requires an `.env` file with `API_KEY` and `PORT`.
 - For full setup instructions, use the root `README.md`.
+- When deploying to Vercel, set `VITE_API_URL` to your backend production URL so the frontend calls the correct API endpoint.
