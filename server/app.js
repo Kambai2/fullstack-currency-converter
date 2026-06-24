@@ -21,6 +21,12 @@ app.use(cors());
 //! Note: In production, narrow this to your frontend origin for better security.
 
 //! conversation routes
+app.get('/api/convert', (req, res) => {
+  res.status(200).json({
+    message: 'This endpoint expects a POST request with JSON body: { from, to, amount }',
+  });
+});
+
 app.post('/api/convert', async (req, res) => {
     try {
        // get the user data
