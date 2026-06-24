@@ -3,7 +3,6 @@ const axios = require('axios');
 const cors = require("cors");
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const port = process.env.PORT || 5000;
 const app = express();
 
 const API_URL = 'https://v6.exchangerate-api.com/v6';
@@ -46,7 +45,12 @@ app.post('/api/convert', async (req, res) => {
 });
 
 
-//! start server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+//! start server when run directly
+if (require.main === module) {
+  const port = process.env.PORT || 5000;
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+
+module.exports = app;
