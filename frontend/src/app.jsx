@@ -11,8 +11,33 @@ function App() {
     const [result, setResult] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [history, setHistory] = useState([]);
 
-    const currencyCodes = ["USD", "EUR", "GBP", "JPY", "CAD", "NGN", "GHS", "XOF", "CHF", "BRL", "MXN", "THB", "TRY", "INR", "PKR", "VND"];
+    const currencyOptions = [
+        { code: "USD", label: "United States", emoji: "🇺🇸" },
+        { code: "EUR", label: "Eurozone", emoji: "🇪🇺" },
+        { code: "GBP", label: "United Kingdom", emoji: "🇬🇧" },
+        { code: "JPY", label: "Japan", emoji: "🇯🇵" },
+        { code: "CAD", label: "Canada", emoji: "🇨🇦" },
+        { code: "NGN", label: "Nigeria", emoji: "🇳🇬" },
+        { code: "GHS", label: "Ghana", emoji: "🇬🇭" },
+        { code: "XOF", label: "West Africa", emoji: "🇪🇹" },
+        { code: "CHF", label: "Switzerland", emoji: "🇨🇭" },
+        { code: "BRL", label: "Brazil", emoji: "🇧🇷" },
+        { code: "MXN", label: "Mexico", emoji: "🇲🇽" },
+        { code: "THB", label: "Thailand", emoji: "🇹🇭" },
+        { code: "TRY", label: "Turkey", emoji: "🇹🇷" },
+        { code: "INR", label: "India", emoji: "🇮🇳" },
+        { code: "PKR", label: "Pakistan", emoji: "🇵🇰" },
+        { code: "VND", label: "Vietnam", emoji: "🇻🇳" },
+    ];
+
+    const popularPairs = [
+        { from: "USD", to: "EUR" },
+        { from: "USD", to: "INR" },
+        { from: "EUR", to: "GBP" },
+        { from: "BRL", to: "USD" },
+    ];
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,7 +47,27 @@ function App() {
         }));
     };
 
-    const apiUrl = import.meta.env.VITE_API_URL || window.location.origin;
+    const handleQuickPair = (from, to) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            from,
+            to,
+        }));
+    };
+
+    const formatCurrency = (value, currency) => {
+        try {
+            return new Intl.NumberFormat(navigator.language || 'en-US', {
+                style: 'currency',
+                currency,
+                maximumFractionDigits: 2,
+            }).format(value);
+        } catch {
+            return `${value} ${currency}`;
+        }
+    };
+
+    const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://server-six-beta-phk8rnvxmd.vercel.app" : "http://localhost:5000");
 
     const getErrorMessage = (error) => {
         if (!error) return "Conversion failed. Please try again.";
@@ -45,7 +90,19 @@ function App() {
 
         try {
             const response = await axios.post(`${apiUrl}/api/convert`, formData);
-            setResult(response?.data);
+            const data = response?.data;
+            setResult(data);
+            setHistory((prevHistory) => [
+                {
+                    from: formData.from,
+                    to: formData.to,
+                    amount: formData.amount,
+                    convertedAmount: data?.convertedAmount,
+                    conversionRate: data?.conversionRate,
+                    timestamp: new Date().toLocaleTimeString(),
+                },
+                ...prevHistory,
+            ].slice(0, 5));
             setError("");
         } catch (err) {
             setError(getErrorMessage(err));
@@ -62,6 +119,18 @@ function App() {
             </section>
             <section className="converter">
                 <form onSubmit={handleSubmit}>
+                    <div className="quick-pairs">
+                        {popularPairs.map((pair) => (
+                            <button
+                                key={`${pair.from}-${pair.to}`}
+                                type="button"
+                                className="quick-pair-btn"
+                                onClick={() => handleQuickPair(pair.from, pair.to)}
+                            >
+                                {pair.from} → {pair.to}
+                            </button>
+                        ))}
+                    </div>
                     <select
                      name="from"
                      value={formData.from}
@@ -69,45 +138,57 @@ function App() {
                      className="input"
                         >
                             <option value="">Select From Currency</option>
-                            {currencyCodes.map((code) => (
+                            {currencyOptions.map(({ code, label, emoji }) => (
                                 <option key={code} value={code}>
-                                    {code}
+                                    {emoji} {label} ({code})
                                 </option>
                             ))}
                      </select>
-<select 
-    name="to"
-    value={formData.to}
-    onChange={handleChange}
-    className="input"
-    >
-           <option value="">Select To Currency</option>
-                            {currencyCodes.map((code) => (
-                                <option key={code} value={code}>
-                                    {code}
-                                </option>
-                            ))}
-    </select>
-            <input
-                name="amount"
-                value={formData.amount}
-                onChange={handleChange}
-                placeholder="Amount"
-                type="number"
-                className="input"
-            />
-            <button type="submit" className="submit-btn" disabled={loading}>
-                {loading ? "Converting..." : "Convert"}
-            </button>
+                    <select 
+                        name="to"
+                        value={formData.to}
+                        onChange={handleChange}
+                        className="input"
+                    >
+                        <option value="">Select To Currency</option>
+                        {currencyOptions.map(({ code, label, emoji }) => (
+                            <option key={code} value={code}>
+                                {emoji} {label} ({code})
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        name="amount"
+                        value={formData.amount}
+                        onChange={handleChange}
+                        placeholder="Amount"
+                        type="number"
+                        className="input"
+                    />
+                    <button type="submit" className="submit-btn" disabled={loading}>
+                        {loading ? "Converting..." : "Convert"}
+                    </button>
                 </form>
                 {result && (
                     <div className="result">
                         <p>
-                            Converted Amount: {result.convertedAmount} {result.target}
+                            Converted Amount: {formatCurrency(result.convertedAmount, result.target)}
                         </p>
                         <p>
-                            Conversion Rate: {result.conversionRate}
+                            Conversion Rate: 1 {result.base} = {formatCurrency(result.conversionRate, result.target)}
                         </p>
+                    </div>
+                )}
+                {history.length > 0 && (
+                    <div className="history">
+                        <h3>Recent conversions</h3>
+                        <ul>
+                            {history.map((item, index) => (
+                                <li key={`${item.from}-${item.to}-${index}`}>
+                                    {item.timestamp}: {item.amount} {item.from} → {formatCurrency(item.convertedAmount, item.to)}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 )}
                 {error && <p className="error">Error: {error}</p>}

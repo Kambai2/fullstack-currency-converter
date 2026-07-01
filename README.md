@@ -106,6 +106,7 @@ README.md
 - Keep `.env` files private; they are ignored by `.gitignore`.
 - The API key must be valid for exchange rate lookups.
 - When deploying the frontend, set `VITE_API_URL` to your backend deployment URL so the app can reach the correct API.
+- For Vercel, add `API_KEY` in the backend project environment variables and `VITE_API_URL` in the frontend project environment variables.
 - This setup is intended for local development.
 
 ## License
