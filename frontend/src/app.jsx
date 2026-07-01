@@ -12,6 +12,10 @@ function App() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [history, setHistory] = useState([]);
+    const [favorites, setFavorites] = useState([]);
+    const [copySuccess, setCopySuccess] = useState("");
+
+    const presetAmounts = [10, 25, 50, 100, 250];
 
     const currencyOptions = [
         { code: "USD", label: "United States", emoji: "🇺🇸" },
@@ -53,6 +57,51 @@ function App() {
             from,
             to,
         }));
+    };
+
+    const handlePresetAmount = (value) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            amount: value,
+        }));
+    };
+
+    const swapCurrencies = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            from: prevData.to,
+            to: prevData.from,
+        }));
+    };
+
+    const handleSaveFavorite = () => {
+        if (!formData.from || !formData.to) return;
+        const key = `${formData.from}-${formData.to}`;
+        setFavorites((prev) => {
+            if (prev.some((item) => item.key === key)) return prev;
+            return [{ key, from: formData.from, to: formData.to }, ...prev];
+        });
+    };
+
+    const handleSelectFavorite = (favorite) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            from: favorite.from,
+            to: favorite.to,
+        }));
+    };
+
+    const handleCopyResult = async () => {
+        if (!result) return;
+        const text = `${formData.amount} ${formData.from} = ${formatCurrency(result.convertedAmount, result.target)} (${result.conversionRate.toFixed(4)} ${result.target} per ${result.base})`;
+        try {
+            await navigator.clipboard.writeText(text);
+            setCopySuccess("Result copied to clipboard!");
+            setTimeout(() => setCopySuccess(""), 2500);
+        } catch {
+            setCopySuccess("Unable to copy result.");
+            setTimeout(() => setCopySuccess(""), 2500);
+        }
     };
 
     const formatCurrency = (value, currency) => {
@@ -131,6 +180,25 @@ function App() {
                             </button>
                         ))}
                     </div>
+                    <div className="preset-row">
+                        {presetAmounts.map((amount) => (
+                            <button
+                                key={amount}
+                                type="button"
+                                className="preset-btn"
+                                onClick={() => handlePresetAmount(amount)}
+                            >
+                                {amount}
+                            </button>
+                        ))}
+                        <button
+                            type="button"
+                            className="swap-btn"
+                            onClick={swapCurrencies}
+                        >
+                            Swap currencies
+                        </button>
+                    </div>
                     <select
                      name="from"
                      value={formData.from}
@@ -191,9 +259,57 @@ function App() {
                         </ul>
                     </div>
                 )}
+                <div className="action-row">
+                    <button
+                        type="button"
+                        className="save-btn"
+                        onClick={handleSaveFavorite}
+                        disabled={!formData.from || !formData.to}
+                    >
+                        Save favorite
+                    </button>
+                    <button
+                        type="button"
+                        className="copy-btn"
+                        onClick={handleCopyResult}
+                        disabled={!result}
+                    >
+                        Copy result
+                    </button>
+                </div>
+                {copySuccess && <p className="success-message">{copySuccess}</p>}
+                {favorites.length > 0 && (
+                    <div className="favorites">
+                        <h3>Saved favorites</h3>
+                        <div className="favorite-list">
+                            {favorites.map((favorite) => (
+                                <button
+                                    key={favorite.key}
+                                    type="button"
+                                    className="favorite-chip"
+                                    onClick={() => handleSelectFavorite(favorite)}
+                                >
+                                    {favorite.from} → {favorite.to}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
                 {error && <p className="error">Error: {error}</p>}
             </section>
-                <section className="additional-info">
+            <section className="promo">
+                <h2>Partner offers</h2>
+                <p>Boost your conversion experience with MoneyTag savings and Adsterra monetization tools.</p>
+                <div className="promo-links">
+                    <a href="https://moneytag.com" target="_blank" rel="noreferrer" className="promo-btn">
+                        Explore MoneyTag Offers
+                    </a>
+                    <a href="https://adsterra.com" target="_blank" rel="noreferrer" className="promo-btn secondary">
+                        View Adsterra Tools
+                    </a>
+                </div>
+            </section>
+            <section className="additional-info">
                     <h2>Why Choose Global Currency Converter?</h2>
                     <p>Detailed explanation on advantages or instructions for use.</p>
                 </section>

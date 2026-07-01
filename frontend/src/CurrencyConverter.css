@@ -88,6 +88,30 @@ body {
     transform: translateY(-1px);
 }
 
+.preset-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.preset-btn,
+.swap-btn {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: #eef2ff;
+    padding: 12px 14px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.preset-btn:hover,
+.swap-btn:hover {
+    background: rgba(74, 199, 255, 0.18);
+    transform: translateY(-1px);
+}
+
 .submit-btn {
     width: 100%;
     padding: 14px 18px;
@@ -128,6 +152,81 @@ body {
     font-size: 1.15rem;
 }
 
+.action-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.save-btn,
+.copy-btn {
+    flex: 1;
+    min-width: 160px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: none;
+    color: #081123;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #7be3d2, #55a9ff);
+}
+
+.copy-btn {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+}
+
+.save-btn:hover,
+.copy-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 30px rgba(41, 123, 255, 0.18);
+}
+
+.success-message {
+    margin-top: 14px;
+    text-align: center;
+    color: #93ffcb;
+    font-weight: 600;
+}
+
+.favorites {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+}
+
+.favorites h3 {
+    margin-bottom: 12px;
+    color: #b2ccff;
+}
+
+.favorite-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.favorite-chip {
+    padding: 10px 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+    color: #eef2ff;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.favorite-chip:hover {
+    background: rgba(74, 199, 255, 0.18);
+    transform: translateY(-1px);
+}
+
 .error {
     text-align: center;
     margin-top: 20px;
@@ -145,6 +244,53 @@ body {
 .additional-info h2 {
     margin-bottom: 14px;
     color: #e1e9ff;
+}
+
+.promo {
+    max-width: 560px;
+    margin: 24px auto 0;
+    padding: 24px;
+    background: rgba(24, 34, 83, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    text-align: center;
+}
+
+.promo h2 {
+    margin-bottom: 14px;
+    color: #a1d4ff;
+}
+
+.promo p {
+    margin-bottom: 18px;
+    color: #d7dbff;
+    opacity: 0.92;
+}
+
+.promo-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+}
+
+.promo-btn {
+    padding: 14px 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #49d2ff, #6b6eff);
+    color: #081123;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.promo-btn.secondary {
+    background: linear-gradient(135deg, #ff9a66, #ff6a94);
+}
+
+.promo-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 30px rgba(41, 123, 255, 0.18);
 }
 
 .additional-info p {
