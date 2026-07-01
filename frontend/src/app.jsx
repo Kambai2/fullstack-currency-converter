@@ -14,6 +14,15 @@ function App() {
     const [history, setHistory] = useState([]);
     const [favorites, setFavorites] = useState([]);
     const [copySuccess, setCopySuccess] = useState("");
+    const [budgetData, setBudgetData] = useState({
+        base: "USD",
+        target: "EUR",
+        dailyAmount: "",
+        days: "7",
+    });
+    const [budgetResult, setBudgetResult] = useState(null);
+    const [budgetLoading, setBudgetLoading] = useState(false);
+    const [budgetError, setBudgetError] = useState("");
 
     const presetAmounts = [10, 25, 50, 100, 250];
 
@@ -101,6 +110,47 @@ function App() {
         } catch {
             setCopySuccess("Unable to copy result.");
             setTimeout(() => setCopySuccess(""), 2500);
+        }
+    };
+
+    const handleBudgetChange = (e) => {
+        const { name, value } = e.target;
+        setBudgetData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
+    const handleBudgetSubmit = async (e) => {
+        e.preventDefault();
+        setBudgetError("");
+        setBudgetResult(null);
+
+        if (!budgetData.base || !budgetData.target || !budgetData.dailyAmount || !budgetData.days) {
+            setBudgetError("Please enter your daily budget and travel duration.");
+            return;
+        }
+
+        setBudgetLoading(true);
+        try {
+            const response = await axios.post(`${apiUrl}/api/convert`, {
+                from: budgetData.base,
+                to: budgetData.target,
+                amount: budgetData.dailyAmount,
+            });
+            const convertedDaily = response.data.convertedAmount;
+            setBudgetResult({
+                dailyConverted: convertedDaily,
+                totalConverted: convertedDaily * Number(budgetData.days),
+                totalBase: Number(budgetData.dailyAmount) * Number(budgetData.days),
+                target: response.data.target,
+                base: response.data.base,
+                rate: response.data.conversionRate,
+            });
+        } catch (err) {
+            setBudgetError(getErrorMessage(err));
+        } finally {
+            setBudgetLoading(false);
         }
     };
 
@@ -296,6 +346,67 @@ function App() {
                     </div>
                 )}
                 {error && <p className="error">Error: {error}</p>}
+            </section>
+            <section className="budget-card">
+                <h2>Travel Budget Planner</h2>
+                <p>Convert your daily budget and see the total cost for your trip in the destination currency.</p>
+                <form className="budget-form" onSubmit={handleBudgetSubmit}>
+                    <div className="budget-row">
+                        <select
+                            name="base"
+                            value={budgetData.base}
+                            onChange={handleBudgetChange}
+                            className="input"
+                        >
+                            {currencyOptions.map(({ code, label, emoji }) => (
+                                <option key={code} value={code}>
+                                    {emoji} {label} ({code})
+                                </option>
+                            ))}
+                        </select>
+                        <select
+                            name="target"
+                            value={budgetData.target}
+                            onChange={handleBudgetChange}
+                            className="input"
+                        >
+                            {currencyOptions.map(({ code, label, emoji }) => (
+                                <option key={code} value={code}>
+                                    {emoji} {label} ({code})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="budget-row">
+                        <input
+                            name="dailyAmount"
+                            value={budgetData.dailyAmount}
+                            onChange={handleBudgetChange}
+                            placeholder="Daily budget"
+                            type="number"
+                            className="input"
+                        />
+                        <input
+                            name="days"
+                            value={budgetData.days}
+                            onChange={handleBudgetChange}
+                            placeholder="Days"
+                            type="number"
+                            className="input"
+                        />
+                    </div>
+                    <button type="submit" className="submit-btn" disabled={budgetLoading}>
+                        {budgetLoading ? "Calculating..." : "Calculate travel budget"}
+                    </button>
+                </form>
+                {budgetResult && (
+                    <div className="budget-summary">
+                        <p>Daily value: {formatCurrency(budgetResult.dailyConverted, budgetResult.target)} per {budgetResult.base} {budgetData.dailyAmount}</p>
+                        <p>Total for {budgetData.days} days: {formatCurrency(budgetResult.totalConverted, budgetResult.target)}</p>
+                        <p>Rate: 1 {budgetResult.base} = {formatCurrency(budgetResult.rate, budgetResult.target)}</p>
+                    </div>
+                )}
+                {budgetError && <p className="error">{budgetError}</p>}
             </section>
             <section className="promo">
                 <h2>Partner offers</h2>
