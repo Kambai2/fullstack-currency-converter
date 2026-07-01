@@ -12,7 +12,7 @@ function App() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const currencyCodes = ["USD", "EUR", "GBP", "JPY", "CAD", "NGN", "GHS", "XOF"];
+    const currencyCodes = ["USD", "EUR", "GBP", "JPY", "CAD", "NGN", "GHS", "XOF", "CHF", "BRL", "MXN", "THB", "TRY", "INR", "PKR", "VND"];
 
     const handleChange = (e) => {
         const { name, value } = e.target;
