@@ -1,0 +1,12 @@
+{
+  "name": "mern-currency-converter",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "server"
+  ],
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  }
+}
